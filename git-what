@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+n="${1:-5}"
+git reflog \
+  | grep "checkout:" \
+  | awk '{print $NF}' \
+  | awk '!seen[$0]++' \
+  | head -n "$n"

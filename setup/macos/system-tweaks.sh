@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # enable dock auto-hide
 defaults write com.apple.dock autohide -bool true
 
@@ -20,10 +22,10 @@ defaults write com.apple.dock expose-animation-duration -float 0.1
 killall Dock
 
 # show file extensions by default
-defaults write NSGlobalDomain "AppleShowAllExtensions" -bool "false"
+defaults write NSGlobalDomain "AppleShowAllExtensions" -bool "true"
 
 # show hidden files in finder
-defaults write com.apple.finder "AppleShowAllFiles" -bool "false"
+defaults write com.apple.finder "AppleShowAllFiles" -bool "true"
 
 # show path bar in finder
 defaults write com.apple.finder "ShowPathbar" -bool "true"

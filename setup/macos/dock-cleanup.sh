@@ -12,9 +12,10 @@ declare -a apps=(
   '/Applications/Slack.app'
   '/Applications/Discord.app'
   '/Applications/Visual Studio Code.app'
+  '/Applications/Obsidian.app'
   '/Applications/Firefox.app'
   '/Applications/Google Chrome.app'
-  '/System/Applications/System Preferences.app'
+  '/System/Applications/System Settings.app'
 )
 
 # declare -a folders=(
@@ -22,7 +23,7 @@ declare -a apps=(
 # )
 
 clear_dock
-# disable_recent_apps_from_dock
+disable_recent_apps_from_dock
 
 for app in "${apps[@]}"; do
   add_app_to_dock "$app"

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 # enable dock auto-hide
 defaults write com.apple.dock autohide -bool true
@@ -19,7 +20,7 @@ defaults write com.apple.dock "expose-group-apps" -bool "true"
 defaults write com.apple.dock expose-animation-duration -float 0.1
 
 #restart dock to apply changes
-killall Dock
+killall Dock >/dev/null 2>&1 || true
 
 # show file extensions by default
 defaults write NSGlobalDomain "AppleShowAllExtensions" -bool "true"
@@ -36,7 +37,7 @@ defaults write com.apple.finder "FXPreferredViewStyle" -string "clmv"
 # DO NOT save to iCloud by default
 defaults write NSGlobalDomain "NSDocumentSaveNewDocumentsToCloud" -bool "false"
 # restart finder to apply changes
-killall Finder
+killall Finder >/dev/null 2>&1 || true
 
 # use plain text mode by default in TextEdit
 defaults write com.apple.TextEdit "RichText" -bool "false"
@@ -44,4 +45,4 @@ defaults write com.apple.TextEdit "RichText" -bool "false"
 # disable smart quotes in TextEdit
 defaults write com.apple.TextEdit "SmartQuotes" -bool "false"
 # restart TextEdit to apply changes
-killall TextEdit
+killall TextEdit >/dev/null 2>&1 || true

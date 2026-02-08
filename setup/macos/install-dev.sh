@@ -41,6 +41,7 @@ fi
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
   read -r -p "Oh My Zsh not found. Install Oh My Zsh? (y/n) " install_ohmyzsh
   if [[ $install_ohmyzsh == "y" || $install_ohmyzsh == "Y" ]]; then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    # Prevent the installer from starting a new shell or changing the login shell mid-script.
+    RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   fi
 fi

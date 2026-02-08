@@ -45,3 +45,28 @@ if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
     RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   fi
 fi
+
+# Install powerlevel10k theme and set it as default
+if [[ -d "$HOME/.oh-my-zsh" ]]; then
+  ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+  P10K_DIR="$ZSH_CUSTOM_DIR/themes/powerlevel10k"
+  if [[ ! -d "$P10K_DIR" ]]; then
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$P10K_DIR"
+  fi
+
+  ZSHRC="$HOME/.zshrc"
+  THEME_LINE='ZSH_THEME="powerlevel10k/powerlevel10k"'
+  if [[ -f "$ZSHRC" ]]; then
+    if grep -q '^ZSH_THEME=' "$ZSHRC"; then
+      # macOS BSD sed requires a backup suffix; use empty string to avoid backup files.
+      sed -i '' "s|^ZSH_THEME=.*|$THEME_LINE|" "$ZSHRC"
+    else
+      {
+        printf '\n# Theme\n'
+        printf '%s\n' "$THEME_LINE"
+      } >>"$ZSHRC"
+    fi
+  else
+    printf '%s\n' "$THEME_LINE" >"$ZSHRC"
+  fi
+fi

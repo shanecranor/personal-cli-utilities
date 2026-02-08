@@ -2,6 +2,9 @@ brew install --cask google-chrome
 brew install --cask firefox
 brew install --cask visual-studio-code
 
+# cool calendar toolbar app
+brew install --cask itsycal
+
 # ask user before installing these apps
 read -p "Do you want to install Slack? (y/n) " install_slack
 if [[ $install_slack == "y" || $install_slack == "Y" ]]; then

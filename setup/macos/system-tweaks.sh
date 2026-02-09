@@ -19,13 +19,12 @@ defaults write com.apple.dock "expose-group-apps" -bool "true"
 # speed up mission control animation
 defaults write com.apple.dock expose-animation-duration -float 0.1
 
+#restart dock to apply changes
+killall Dock >/dev/null 2>&1 || true
+
 # disable window tiling animations (I also recommend setting keyboard shortcuts to ctrl + option + arrow keys for tiling windows)
 defaults write com.apple.WindowManager DisableTilingAnimations -bool true
 killall WindowManager
-
-
-#restart dock to apply changes
-killall Dock >/dev/null 2>&1 || true
 
 # show file extensions by default
 defaults write NSGlobalDomain "AppleShowAllExtensions" -bool "true"

@@ -48,5 +48,8 @@ defaults write com.apple.TextEdit "RichText" -bool "false"
 
 # disable smart quotes in TextEdit
 defaults write com.apple.TextEdit "SmartQuotes" -bool "false"
-# restart TextEdit to apply changes
 killall TextEdit >/dev/null 2>&1 || true
+
+# show battery percentage in menu bar
+defaults -currentHost write com.apple.controlcenter BatteryShowPercentage -bool true
+killall ControlCenter >/dev/null 2>&1 || true

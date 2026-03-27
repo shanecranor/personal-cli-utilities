@@ -31,7 +31,7 @@ confirm_install() {
 ensure_brew
 
 brew install --cask google-chrome
-brew install --cask firefox
+# brew install --cask firefox
 brew install --cask visual-studio-code
 
 # cool calendar toolbar app
@@ -39,9 +39,9 @@ brew install --cask itsycal
 
 # ask user before installing these apps
 confirm_install "Slack" "slack"
-confirm_install "Discord" "discord"
-confirm_install "Spotify" "spotify"
-confirm_install "Obsidian" "obsidian"
-confirm_install "the ChatGPT app" "chatgpt"
-confirm_install "Beekeeper Studio" "beekeeper-studio"
-confirm_install "darktable" "darktable"
+# confirm_install "Discord" "discord"
+# confirm_install "Spotify" "spotify"
+# confirm_install "Obsidian" "obsidian"
+# confirm_install "the ChatGPT app" "chatgpt"
+# confirm_install "Beekeeper Studio" "beekeeper-studio"
+# confirm_install "darktable" "darktable"

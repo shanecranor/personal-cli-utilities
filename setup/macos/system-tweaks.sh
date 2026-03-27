@@ -14,7 +14,7 @@ defaults write com.apple.dock "autohide-delay" -float "0"
 defaults write com.apple.dock showhidden -bool true
 
 # group windows by application in mission control
-defaults write com.apple.dock "expose-group-apps" -bool "true"
+# defaults write com.apple.dock "expose-group-apps" -bool "true"
 
 # speed up mission control animation
 defaults write com.apple.dock expose-animation-duration -float 0.1

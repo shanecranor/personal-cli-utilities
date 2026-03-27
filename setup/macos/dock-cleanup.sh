@@ -8,12 +8,12 @@ source "${SCRIPT_DIR}/util/dock-functions.sh"
 declare -a apps=(
   '/System/Applications/Utilities/Terminal.app'
   '/System/Applications/Utilities/Activity Monitor.app'
-  '/Applications/Spotify.app'
+  # '/Applications/Spotify.app'
   '/Applications/Slack.app'
-  '/Applications/Discord.app'
+  # '/Applications/Discord.app'
   '/Applications/Visual Studio Code.app'
-  '/Applications/Obsidian.app'
-  '/Applications/Firefox.app'
+  # '/Applications/Obsidian.app'
+  # '/Applications/Firefox.app'
   '/Applications/Google Chrome.app'
   '/System/Applications/System Settings.app'
 )

@@ -19,3 +19,7 @@ Notes:
 ### `git what`
 
 Prints the last n branches that have been checked out in case you forget the names of the branches you were working on in repos with lots of branches. Defaults to the last 5 branches.
+
+### `checkout`
+
+Reads the first line piped to it and runs `git checkout` with that value.

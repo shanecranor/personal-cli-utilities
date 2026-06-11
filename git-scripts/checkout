@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+IFS= read -r branch || true
+branch="${branch%$'\r'}"
+
+if [[ -z "$branch" ]]; then
+  echo "checkout: no branch name provided on stdin" >&2
+  exit 1
+fi
+
+git checkout "$branch"

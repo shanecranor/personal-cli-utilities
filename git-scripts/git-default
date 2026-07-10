@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+remote="${1:-origin}"
+
+if ! git rev-parse --git-dir >/dev/null 2>&1; then
+  echo "git default: not a git repository" >&2
+  exit 1
+fi
+
+default_branch="$(
+  git ls-remote --symref "$remote" HEAD 2>/dev/null |
+    awk '$1 == "ref:" && $3 == "HEAD" { sub("^refs/heads/", "", $2); print $2; exit }' ||
+    true
+)"
+
+if [[ -n "$default_branch" ]]; then
+  git remote set-head "$remote" "$default_branch" >/dev/null 2>&1 || true
+  default_ref="$remote/$default_branch"
+else
+  default_ref="$(git symbolic-ref --quiet --short "refs/remotes/$remote/HEAD" 2>/dev/null || true)"
+fi
+
+if [[ -z "$default_ref" ]] && command -v gh >/dev/null 2>&1; then
+  remote_url="$(git remote get-url "$remote" 2>/dev/null || true)"
+  gh_default_branch="$(gh repo view "$remote_url" --json defaultBranchRef --jq '.defaultBranchRef.name' 2>/dev/null || true)"
+  if [[ -n "$gh_default_branch" ]]; then
+    git remote set-head "$remote" "$gh_default_branch" >/dev/null 2>&1 || true
+    default_ref="$remote/$gh_default_branch"
+  fi
+fi
+
+if [[ -z "$default_ref" ]]; then
+  default_branch="$(git remote show "$remote" 2>/dev/null | awk '/HEAD branch/ {print $NF; exit}' || true)"
+  if [[ -n "$default_branch" ]]; then
+    default_ref="$remote/$default_branch"
+  fi
+fi
+
+branch="${default_ref#"$remote/"}"
+
+if [[ -z "$branch" || "$branch" == "$default_ref" ]]; then
+  echo "git default: could not determine default branch for remote '$remote'" >&2
+  exit 1
+fi
+
+if git show-ref --verify --quiet "refs/heads/$branch"; then
+  git checkout "$branch"
+elif git show-ref --verify --quiet "refs/remotes/$remote/$branch"; then
+  git checkout --track "$remote/$branch"
+else
+  git checkout "$branch"
+fi

@@ -8,6 +8,8 @@ You can also run the scripts individually:
 - `setup/macos/system-tweaks.sh`
 - `setup/macos/install-dev.sh`
 - `setup/macos/apps.sh`
+- `setup/macos/git-scripts.sh`
+- `setup/macos/raycast-scripts.sh`
 
 Notes:
 
@@ -27,3 +29,11 @@ Checks out the default branch for `origin`. Pass a remote name to use a differen
 ### `checkout`
 
 Reads the first line piped to it and runs `git checkout` with that value.
+
+## Raycast Scripts
+
+Run `setup/macos/raycast-scripts.sh` to install the commands into `~/raycast_scripts`.
+
+### `UUID to BIN`
+
+Accepts a UUID argument or reads one from the clipboard, converts it to 32 hexadecimal characters, and copies the result. The Raycast window dismisses after the command runs.

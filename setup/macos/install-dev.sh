@@ -37,6 +37,15 @@ fi
 
 # ---- cli tools ----
 
+# install fzf
+if command -v brew >/dev/null 2>&1; then
+  if ! command -v fzf >/dev/null 2>&1; then
+    brew install fzf
+  fi
+else
+  echo "Homebrew not installed. Skipping fzf install."
+fi
+
 # Install ohmyzsh
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
   read -r -p "Oh My Zsh not found. Install Oh My Zsh? (y/n) " install_ohmyzsh

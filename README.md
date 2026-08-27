@@ -30,10 +30,15 @@ Prints the last n branches that have been checked out in case you forget the nam
 ### `git default`
 
 Checks out the default branch for `origin`. Pass a remote name to use a different remote: `git default upstream`.
+Use `git default --print-only` (or `git default -p`) to print the resolved default branch without changing the current checkout. The flag can be combined with a remote name: `git default --print-only upstream`.
 
 ### `checkout`
 
 Reads the first line piped to it and runs `git checkout` with that value.
+
+### `gh pr-context`
+
+Prints stable JSON metadata for a GitHub pull request, including the PR base and head OIDs, the current target-branch OID, and GitHub's changed-file list. Accepts a PR number in the current repository or a PR URL: `gh pr-context 326`.
 
 ## Git Functions
 

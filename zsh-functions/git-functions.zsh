@@ -1,3 +1,5 @@
+unalias gbr 2>/dev/null || true
+
 gbr() {
   local branch
 

@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  printf 'Usage: gh pr-context [PR number | PR URL]\n'
+}
+
+if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
+  usage
+  exit 0
+fi
+
+if [[ "$#" -gt 1 ]]; then
+  usage >&2
+  exit 2
+fi
+
+if ! command -v gh >/dev/null 2>&1; then
+  printf 'gh pr-context: GitHub CLI (gh) is required\n' >&2
+  exit 1
+fi
+
+if ! command -v jq >/dev/null 2>&1; then
+  printf 'gh pr-context: jq is required\n' >&2
+  exit 1
+fi
+
+pr_reference="${1:-}"
+if [[ -n "$pr_reference" ]]; then
+  pr_url="$(gh pr view "$pr_reference" --json url --jq '.url')"
+else
+  pr_url="$(gh pr view --json url --jq '.url')"
+fi
+
+if [[ ! "$pr_url" =~ ^https://github\.com/([^/]+)/([^/]+)/pull/([0-9]+) ]]; then
+  printf "gh pr-context: unsupported pull request URL '%s'\n" "$pr_url" >&2
+  exit 1
+fi
+
+owner="${BASH_REMATCH[1]}"
+repository="${BASH_REMATCH[2]}"
+number="${BASH_REMATCH[3]}"
+
+graphql_query='
+  query($owner:String!, $name:String!, $number:Int!) {
+    repository(owner:$owner, name:$name) {
+      nameWithOwner
+      pullRequest(number:$number) {
+        number
+        title
+        state
+        url
+        baseRefName
+        baseRefOid
+        headRefName
+        headRefOid
+        baseRef {
+          target { oid }
+        }
+        files(first:100) {
+          totalCount
+          pageInfo {
+            hasNextPage
+          }
+          nodes {
+            path
+            additions
+            deletions
+            changeType
+          }
+        }
+      }
+    }
+  }
+'
+
+context_json="$(
+  gh api graphql \
+    -F "owner=$owner" \
+    -F "name=$repository" \
+    -F "number=$number" \
+    -f "query=$graphql_query" \
+    --jq '
+      .data.repository as $repository
+      | $repository.pullRequest as $pull_request
+      | {
+          repository: $repository.nameWithOwner,
+          number: $pull_request.number,
+          title: $pull_request.title,
+          state: $pull_request.state,
+          url: $pull_request.url,
+          base: {
+            ref: $pull_request.baseRefName,
+            pr_oid: $pull_request.baseRefOid,
+            current_oid: $pull_request.baseRef.target.oid
+          },
+          head: {
+            ref: $pull_request.headRefName,
+            oid: $pull_request.headRefOid
+          },
+          file_count: $pull_request.files.totalCount,
+          files_complete: ($pull_request.files.pageInfo.hasNextPage | not),
+          files: [
+            $pull_request.files.nodes[]
+            | {
+                path,
+                additions,
+                deletions,
+                change_type: .changeType
+              }
+          ]
+        }'
+)"
+
+if [[ "$(printf '%s\n' "$context_json" | jq -r '.files_complete')" != true ]]; then
+  file_count="$(printf '%s\n' "$context_json" | jq -r '.file_count')"
+  printf 'gh pr-context: PR has %s files; pagination is not supported\n' "$file_count" >&2
+  exit 2
+fi
+
+printf '%s\n' "$context_json"
